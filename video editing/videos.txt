@@ -1,0 +1,2 @@
+file 'video editing/fixedLandscapeVideo.mp4'
+file 'video editing/fixedNewLandScapeVideo.mp4'
