@@ -3,15 +3,18 @@ from threading import Thread
 
 clients = []
 
+
 def client_handling(connection, address):
     print(f"Connection from {str(address)}")
     clients.append(connection)
-
     try:
         while True:
             data = connection.recv(1024).decode()
             if not data:
                 break
+            if str(data).lower() == "name":
+                name = input("please state your name: ")
+                address = name
 
             print(f"From {str(address)}: {str(data)}")
             broadcast_message(data, connection)
@@ -38,6 +41,7 @@ def broadcast_message(message, sender_connection):
     
 
 def server_socket():
+    names = {}
     host = socket.gethostname()
     port = 5000
 

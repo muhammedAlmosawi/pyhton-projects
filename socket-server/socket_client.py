@@ -19,12 +19,9 @@ def client_socket():
 
     receive_thread = Thread(target=receive_message, args=(client_socket,))
     receive_thread.start()
-
     message = input(" -> ")
-
     while message.lower().strip() != "bye":
         client_socket.send(message.encode())
-
         message = input(" -> ")
 
     client_socket.close()
