@@ -26,10 +26,10 @@ def client_socket():
         message = input(" -> ")
         client_socket.send(message.encode("utf-8"))
 
-        if message.strip() == "bye":
+        if message == "bye":
             break
         
-
+        
     client_socket.close()
 
 if __name__ == "__main__":
