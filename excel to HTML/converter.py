@@ -1,70 +1,66 @@
 import xlwings as xw
 
-def get_color_hex(color):
-    """Convert a color float to a hexadecimal string."""
-    if color is None:
-        return None
-    try:
-        # Convert float color to integer and then to hex
-        color_int = int(color)
-        # Convert to hex, remove '0x' prefix, pad with zeros if necessary
-        return f"{color_int:06X}"
-    except ValueError:
-        return None
-
 def get_text_format(cell):
     if not cell.value:
         return ""
 
-    text = str(cell.value)
-    tags = []
+    text = cell.value
+    if not text:
+        return ""
 
-    font = cell.api.Font
-    if font.Bold:
-        tags.append("strong")
-    if font.Italic:
-        tags.append("em")
-    if font.Underline == 2:  # xlUnderlineStyleSingle
-        tags.append("u")
+    html_parts = []
+    cell_length = len(text)
 
-    color = get_color_hex(font.Color)
-    if color and color != 'FFFFFF':  # Ignore white color
-        tags.append(f'span style="color:#{color}"')
+    for i in range(1, cell_length + 1):
+        char = cell.api.Characters(i, 1)
+        word = char.Text
 
-    # Ignore background color section
-    # bgcolor = get_color_hex(cell.api.Interior.Color)
-    # if bgcolor and bgcolor != 'FFFFFF':  # Ignore white color
-    #     tags.append(f'span style="background-color:#{bgcolor}"')
+        bold = char.Font.Bold
+        italic = char.Font.Italic
+        underline = char.Font.Underline
 
-    if tags:
-        open_tags = " ".join(f"<{tag}>" for tag in tags)
-        close_tags = " ".join(f"</{tag}>" for tag in reversed(tags))
-        formatted_text = f"{open_tags}{text}{close_tags}"
-    else:
-        formatted_text = text
+        if bold:
+            word = f"<strong>{word}</strong>"
+        if italic:
+            word = f"<em>{word}</em>"
+        if underline:  
+            word = f"<u>{word}</u>"
 
-    return formatted_text
+        html_parts.append(word)
 
-# Initialize Excel application
+    return " ".join(html_parts)
+
+def get_column_text(sheet, column_letter):
+    print("..")
+    last_row = sheet.range(f'{column_letter}1').end("down").row
+    column_range = sheet.range(f'{column_letter}1:{column_letter}{last_row}')
+    column_data = []
+    for cell in column_range :
+        if cell.value == None:
+            break
+        print(f"Processing cell: {cell.address}, Value: {cell.value}")
+        text = get_text_format(cell)
+        column_data.append(text)
+    return column_data
+
 excel = xw.App(visible=False)
-workbook = excel.books.open(r'D:\My-Github\pyhton-projects\excel to HTML\test.xlsx')
+workbook = excel.books.open(r'D:\My-Github\pyhton-projects\excel to HTML\Text Format Samples (2).xlsx')
 sheet = workbook.sheets['Sheet1']
-cell = sheet.range('A1')
+column_letter = 'A'
 
-# Extract and format text
-html_text = get_text_format(cell)
+column_text = get_column_text(sheet, column_letter)
 
-# Output HTML
+
 html_file = r'D:\My-Github\pyhton-projects\excel to HTML\test.html'
-with open(html_file, 'w') as file:
+with open(html_file, 'w', encoding="utf-8") as file:
     file.write('<html>\n')
     file.write('<body>\n')
-    file.write(f'<p>{html_text}</p>\n')
+    for text in column_text:
+        file.write(f'<p>{text}</p>\n')
     file.write('</body>\n')
     file.write('</html>\n')
 
 print("Content printed!")
 
-# Cleanup
 workbook.close()
 excel.quit()

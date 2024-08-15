@@ -8,13 +8,6 @@ class TreeNode:
         self.children.append(child)
         self.count += 1
 
-    def pre_order_traversal(self, node):
-        if node.data == None:
-            return None
-        print(node.data)
-        for child in node.children:
-            self.pre_order_traversal(child)
-
     def depth_first_search(self, node, target):
         if node == None:
             return False
@@ -45,12 +38,20 @@ class TreeNode:
         elif not node.children:
             return 1
         return 1 + max(self.tree_height(child) for child in node.children)
+    
+    def get_count(self):
+        return self.count
+    
+    def pre_order_traversal(self, node):
+        if node.data == None:
+            return None
+        spacing = 0
+        spacing += len(node.children)
 
-    def print_data(self):
-        print(self.data)
-        if self.children:
-            for child in self.children:
-                self.print_data(child)
+        print(" " * spacing, node.data)
+        for child in node.children:
+            self.pre_order_traversal(child)
+
 
 
 
