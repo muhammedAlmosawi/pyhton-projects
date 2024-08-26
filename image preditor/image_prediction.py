@@ -1,5 +1,5 @@
 import tensorflow as tf
-from tensorflow.keras import datasets, layers, models
+from tensorflow.keras import datasets, layers, models # it will give an error where the file can't be imported but just ignore it (I did at least) it worked just fine (on my machine)
 import matplotlib.pyplot as plt
 import os
 import random
