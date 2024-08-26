@@ -13,7 +13,7 @@ class hash_not_map():
         while self.keys[index] != None:
             if self.keys == key:
                 self.values[index] = value
-                return 
+                return None
             index = (index + 1) % self.size
 
 
@@ -29,7 +29,17 @@ class hash_not_map():
             index = self.hash_function(key + 1)
 
         return None
-    
+
+    def remove(self, key):
+        index = self.hash_function(key)
+
+        while self.keys[index] != None:
+            if self.keys[index] != None:
+                self.values[index] = None
+            index = self.hash_function(key + 1)
+
+        return None
+
 
 hash_table = hash_not_map(5)
 hash_table.put(12, 5)
