@@ -53,11 +53,25 @@ class deque:
             logger.error("the deque is empty (in the peek function)")
         else:
             print(f"the last element of the deque is {self.deque[self.LastElement - 1]}")
+
+    def print(self):
+        if self.isEmpty():
+            logger.error("the deque is empty")
+        else:
+            i = 0
+            try:
+                while i < self.capacity - 1 and self.deque[i] != None:
+                    print(f"the element at index {i} is: {self.deque[i]}")
+                    i += 1
+            except:
+                print("the deque has been printed")
+                
+                     
         
 d = deque(10)
-d.pop()
 d.push(17)
 d.pushLeft(15)
 d.push(3)
 d.pushLeft(4)
 d.peek()
+d.print()
