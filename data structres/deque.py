@@ -58,9 +58,9 @@ class deque:
         if self.isEmpty():
             logger.error("the deque is empty")
         else:
-            i = 0
             try:
-                while i < self.capacity - 1 and self.deque[i] != None:
+                i = 0
+                while True:
                     print(f"the element at index {i} is: {self.deque[i]}")
                     i += 1
             except:
